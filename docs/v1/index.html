@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Check-in Documentation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style type="text/css">
+body { 
+	background-color: #e7d4fc; 
+	margin: 0; 
+	padding: 0; 
+	font-family: Consolas;
+}
+div { 
+	background-color: #f2e8fc; 
+	width: 80%; 
+	margin: 2em auto; 
+	padding: 2em; 
+	border-radius: 0.5em; 
+	box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02); 
+}
+div.table {
+	background-color: #f6f2f9;
+	width: 30%;
+	margin: 1em;
+	padding: 1em;
+	float: right;
+}
+div.copied {
+	position: sticky;
+	background-color: #529b52;
+	margin: 1em;
+	padding: 1em; 
+	border-radius: 0.5em; 
+	box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02); 
+	bottom: 20px;
+	left: 20px;
+	width: 176px;
+	display: none;
+}
+a {
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
+a:visited {
+	color: #0000ee;
+}
+code {
+	border-radius: 0.1em;
+	outline-color: #c0b1ce;
+	background-color: #d5c7e2;
+	outline-style: solid;
+}
+code.copyable {
+	
+}
+code.copyable:hover {
+	border-radius: 0.1em;
+	outline-color: #ab86ce;
+	background-color: #c497ef;
+	outline-style: solid;
+	cursor: pointer;
+}
+samp {
+	border-radius: 0.1em;
+	outline-color: #c0b1ce;
+	background-color: #d5c7e2;
+	outline-style: solid;
+}
+footer {
+	background-color: #8d8299;
+	text-align: center;
+	position: sticky;
+	bottom: 0;
+}
+</style>
+<script>
+dark = false
+function modeSwitch() {
+	if (dark == false) {
+		document.getElementById("content").style.backgroundColor = "#383838";
+		document.getElementById("full").style.backgroundColor = "#212121";
+		document.getElementById("full").style.color = "#d6d6d6";
+		document.getElementById("table").style.backgroundColor = "#444444";
+		document.getElementById("footer").style.backgroundColor = "#1c1c1c";
+		document.getElementById("darkbutton").innerHTML = "light";
+		links = document.getElementsByTagName("a");
+		for (let i = 0; i < links.length; i++) {
+			links[i].style.color = "#9cdfff";
+		}
+		codeblocks = document.getElementsByTagName("code");
+		for (let i = 0; i < codeblocks.length; i++) { // handles code logic. complicated because there's several!
+			codeblocks[i].style.backgroundColor = "#232e3f";
+			codeblocks[i].style.outlineColor = "#162f59";
+			codeblocks[i].onmouseover = function() {
+				if (codeblocks[i].classList.contains("copyable")) {
+					codeblocks[i].style.backgroundColor = "#2b3d59";
+					codeblocks[i].style.outlineColor = "#1e417a";
+				}
+			}
+			codeblocks[i].onmouseout = function() {
+				if (codeblocks[i].classList.contains("copyable")) {
+					codeblocks[i].style.backgroundColor = "#232e3f";
+					codeblocks[i].style.outlineColor = "#162f59";
+				}
+			}
+		}
+		sampblocks = document.getElementsByTagName("samp"); // todo: figure out if i'm going to differentiate between code & samp, or just use code for everything
+		for (let i = 0; i < sampblocks.length; i++) {
+			sampblocks[i].style.backgroundColor = "#232e3f";
+			sampblocks[i].style.outlineColor = "#162f59";
+		}
+		dark = true;
+	}
+	else if (dark == true) {
+		document.getElementById("content").style.backgroundColor = "#f2e8fc";
+		document.getElementById("full").style.backgroundColor = "#e7d4fc";
+		document.getElementById("full").style.color = "#000000";
+		document.getElementById("table").style.backgroundColor = "#f6f2f9";
+		document.getElementById("footer").style.backgroundColor = "#8d8299";
+		document.getElementById("darkbutton").innerHTML = "dark";
+		links = document.getElementsByTagName("a");
+		for (let i = 0; i < links.length; i++) { // handles code logic. complicated because there's several!
+			links[i].style.color = "#0000ee";
+		}
+		codeblocks = document.getElementsByTagName("code");
+		for (let i = 0; i < codeblocks.length; i++) {
+			codeblocks[i].style.backgroundColor = "#d5c7e2";
+			codeblocks[i].style.outlineColor = "#c0b1ce";
+			codeblocks[i].onmouseover = function() {
+				if (codeblocks[i].classList.contains("copyable")) {
+					codeblocks[i].style.backgroundColor = "#c497ef";
+					codeblocks[i].style.outlineColor = "#ab86ce";
+				}
+			}
+			codeblocks[i].onmouseout = function() {
+				if (codeblocks[i].classList.contains("copyable")) {
+					codeblocks[i].style.backgroundColor = "#d5c7e2";
+					codeblocks[i].style.outlineColor = "#c0b1ce";
+				}
+			}
+		}
+		sampblocks = document.getElementsByTagName("samp");
+		for (let i = 0; i < sampblocks.length; i++) {
+			sampblocks[i].style.backgroundColor = "#d5c7e2";
+			sampblocks[i].style.outlineColor = "#c0b1ce";
+		}
+		dark = false;
+	}
+};
+window.onresize = (event) => {
+	checkResolution()
+};
+
+window.onload = (event) => {
+	checkResolution()
+	if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+		modeSwitch()
+	}
+};
+
+function checkResolution() {
+	if ((window.innerWidth) < (window.innerHeight)) {
+		mobileLayout(true)
+	}
+	else {
+		mobileLayout(false)
+	};
+};
+
+function mobileLayout(val) {
+	if (val == true) {
+		document.getElementById("table").style.width = "80%";
+		document.getElementById("table").style.float = "none";
+		document.getElementById("table").style.margin = "1em auto";
+		document.getElementById("mobile-breaker").style.display = "block";
+	}
+	else {
+		document.getElementById("table").style.width = "30%";
+		document.getElementById("table").style.float = "right";
+		document.getElementById("table").style.margin = "1em";
+		document.getElementById("mobile-breaker").style.display = "none";
+	}
+};
+function showNotification() {
+	document.getElementById("copied").style.display = "block";
+	setTimeout(hideNotification, 3000)
+};
+function hideNotification () {
+	document.getElementById("copied").style.display = "none";
+};
+</script>
+</head>
+<body id="full">
+<div id="content">
+	<h1 style="text-align:center"; id="top";>Documentation for my Check-in program for DemSchoolTools</h1>
+	<br>
+	<div id="table"; class="table";>
+		<h3 style="text-align:center";>Table of Contents</h3>
+		<ol>
+			<li><a href="#introduction">Introduction</a></li>
+			<li><a href="#requirements">Requirements</a></li>
+			<li><a href="#setup">Setting Up</a></li>
+			<li><a href="#personid">What's a Person ID?</a></li>
+			<li><a href="#usage">How to use the Program</a></li>
+			<li><a href="#debug">Debugging</a></li>
+			<ol>
+				<li><a href="#dump-roster-info">Dump Roster Info</a></li>
+				<li><a href="#get-person-info">Get Person Info</a></li>
+				<li><a href="#list-users-not-signed-in-out">List Users Not Signed In/Out</a></li>
+			</ol>
+			<li><a href="#troubleshooting">Troubleshooting</a></li>
+			<ol>
+				<li><a href="#env-not-present">One or more required environment variables are not present!</a></li>
+				<li><a href="#could-not-connect">Could not connect to server! Please try again!</a></li>
+				<li><a href="#not-found">The specified person could not be found. Did you type the info correctly?</a></li>
+				<li><a href="#status-code">Failed to sign in/out with status code...</a></li>
+				<li><a href="#no-debug">Debug module not found!</a></li>
+				<li><a href="#wrong-time">Successfully signed in, but the sign-in time is wrong</a></li>
+				<li><a href="#not-listed">My issue is not listed/Program closed unexpectedly/Python error</a></li>
+			</ol>
+		</ol>
+	</div>
+	<p style="display:none;" id="mobile-breaker"><br></p>
+	<h2 id="introduction">Introduction</h2>
+		<p>
+		This program is designed to be an easy way to sign in with <a href="https://github.com/schmave/demschooltools" target="_blank"> the DemSchoolTools check-in app.</a><br>
+		I made it because I was bored and had nothing else to do. It's just a project I'm working on for fun! <br>
+		This documentation serves as some sort of worklog, and as a reference if I decide to make it public. <br>
+		I designed it for windows systems, and I cannot guarantee it works on Mac, Linux, or other systems. <br>
+		If you want to contact me, you can do so by pressing the "contact" button at the bottom of the page. <br>
+		</p>
+	<h2 id="requirements">Requirements</h2>
+		<p>
+		To start, you'll need a couple things. You can't exactly run a program if the system doesn't know how.
+		<ul>
+			<li><a href="https://www.python.org/downloads/">Python</a> 3.11 or above</li>
+			<li>Windows 10 or 11</li>
+			<li>A stable internet connection</li>
+			<li>Administrator priveleges</li>
+		</ul>
+		</p>
+	<h2 id="setup">Setting Up</h2>
+		<p>
+		First, <a href="https://www.python.org/downloads/">Python</a> needs to be installed. You can check if Python is installed by running <code class="copyable" onClick="navigator.clipboard.writeText(this.innerHTML);showNotification();" id="copyable";>python --version</code> in your command prompt. <br>
+		After you've installed Python, you'll need to set some environment variables on your system. (You need administrator priveleges for this!)<br>
+		To set environment variables, press the windows key, and search <code class="copyable" onClick="navigator.clipboard.writeText(this.innerHTML);showNotification();" id="copyable";>Edit the system environment variables</code>. Click the first thing that pops up.<br>
+		A system properties window will open, and from there, click "Environment Variables".<br>
+		In the window that opens, press "New" under "System variables", and set the following values.<br>
+		<ul>
+			<li>"subdomain" - The first part of your check-in portal's URL. (____.demschooltools.com/...)</li>
+			<li><abbr title="Not to be confused with 'chickenemail!'">"checkinemail"</abbr> - The "email" you use to log into your school's check-in app.</li>
+			<li>"checkinpass" - The password you use to log into your school's check-in app.</li>
+		</ul>
+		Now, everything should be set up, and you can run the program!<br>
+		</p>
+	<h2 id="personid">What's a Person ID?</h2>
+		<p>
+		When you run the program, it asks you for a "Person ID", but what is that?<br>
+		Person IDs are 5-digit identifiers for each person registered in demschooltools. <b>It is *NOT* the PIN you sign in and out with on the website.</b><br>
+		If you want to know your Person ID, use the <a href="#get-person-info">Get Person Info</a> debug utility.<br>
+		<small>NOTE: If you don't know your Person ID, you can instead use your PIN or name to sign in.</small>
+		</p>
+	<h2 id="usage">How to use the Program</h2>
+		<p>
+		When you launch the program, it will ask you for either a <a href="#personid">Person ID</a>, name, or PIN. This represents the person you want to sign in or out as.<br>
+		Input the data for the corresponding person you want to sign in/out as, and press ENTER. It should then ask you if you want to sign in or out.<br>
+		Input either "in" to sign in, or "out" to sign out.<br>
+		If everything goes well, it should say <samp>Successfully signed in/out</samp>. Otherwise, refer to <a href="#troubleshooting">Troubleshooting</a>.<br>
+		</p>
+	<h2 id="debug">Debugging</h2>
+		<p>
+		The program is bundled with extra debug utilities, which can be accessed by typing <abbr title="Case sensitive!">"DEBUG"</abbr> when asked to provide a name.<br>
+		It can also be accessed using the <em>much less cool way</em> of running the <code>debug.py</code> file.<br>
+		Each debug option has an associated number, which is displayed on the screen when entering debug mode. Input the number corresponding to the utility to access it.<br>
+		Below is a list of utilities you can access:<br>
+		</p>
+	<h3 id="dump-roster-info">Dump Roster Info</h3>
+		<p>
+		Dump Roster Info, when run, gets the roster info from the check-in page, including names, PINs, arrival and departure time, and absence codes for each person, as well as  all absence codes in JSON format, and logs the data to <code>response.json</code>.<br>
+		This utility is called alongside most other debug functions, or if an existing <code>response.json</code> file could not be found when a name or PIN is provided.<br>
+		<b>NOTE: It's a good idea to run this whenever a new student is added to the roster.</b><br>
+		</p>
+	<h3 id="get-person-info">Get Person Info</h3>
+		<p>
+		Get Person Info, when run, calls <a href="#dump-roster-info">Dump Roster Info</a>, and asks for a person ID or name. When provided, returns the corresponding person's information in JSON format, including Person ID, PIN, name, arrival/departure time, and absence code.<br>
+		</p>
+	<h3 id="list-users-not-signed-in-out">List Users Not Signed In/Out</h3>
+		<p>
+		List Users Not Signed In/Out, when run, calls <a href="#dump-roster-info">Dump Roster Info</a>, and returns info for each user who is not signed in, or not signed out, depending on which utility is called.<br>
+		Returned data is in format <samp>indexID - name - personID</samp>.<br>
+		The index ID is not in order of appearance in the list, but the roster as a whole, sorted alphabetically.<br>
+		The utility then asks if you want to sign in/out users. If an index ID is provided, it signs in/out the user associated with that index ID. It continues asking for this until stopped with "X". This acts as a way to sign in/out people quickly.<br>
+		<b>NOTE: Please use this utility responsibly!</b><br>
+		</p>
+	<h2 id="troubleshooting">Troubleshooting</h2>
+		<p>
+		Sometimes, the program will encounter issues, and may not run properly due to a number of reasons. Below is a list of common errors and how to fix them.<br>
+		</p>
+	<h3 id="env-not-present">One or more required environment variables are not present!</h3>
+		<p>
+		If you receive this message, some environment variables are missing that need to be used by the program.<br>
+		Refer to <a href="#setup">Setting Up</a> for more info on how to set these variables.<br>
+		</p>
+	<h3 id="could-not-connect">Could not connect to server! Please try again!</h3>
+		<p>
+		If you receive this message, it means the check-in website could not be reached. This could be caused by not having a stable internet connection.<br>
+		Make sure you have a stable internet connection, then try again.<br>
+		</p>
+	<h3 id="not-found">The specified person could not be found. Did you type the info correctly?</h3>
+		<p>
+		If you receive this message, it means the data you provided to sign in with could not be found in the latest database dump. (see <a href="#dump-roster-info">Dump Roster Info</a> utility.)<br>
+		If you're <em>absolutely sure</em> you typed the data correctly, a new database dump may need to be created by using the above utility.<br>
+		</p>
+	<h3 id="status-code">Failed to sign in/out with status code...</h3>
+		<p>
+		<ul>
+			<li>400 (Bad Request) - The data given to the server was not accepted due to formatting errors or other reasons. Did you type everything correctly?</li>
+			<li>401, 403, 404 - The data given to the server did not go to a valid address, or did not have proper authorization.</li>
+			<li>500 (Internal Server Error) - The data given to the server was invalid, or the server is down.</li>
+		</ul>
+		</p>
+	<h3 id="no-debug">Debug module not found!</h3>
+		<p>
+		The debug utility could not be found. Make sure a file called <code>debug.py</code> exists, and is in the same directory as <code>signin.py</code>.<br>
+		</p>
+	<h3 id="wrong-time">Successfully signed in, but the sign-in time is wrong</h3>
+		<p>
+		Your system time is out of sync, or using the wrong time zone.<br>
+		</p>
+	<h3 id="not-listed">My issue is not listed/Program closed unexpectedly/Python error</h3>
+		<p>
+		If you're having any other issues that are not listed here, or if the program closed unexpectedly, you can reach out to me through the contact email at the bottom of the page, I'll try to respond ASAP!<br>
+		</p>
+</div>
+<div class="copied" id="copied">
+	<span>Copied to clipboard!</span>
+</div>
+
+<footer id="footer">
+	<span><a href="mailto:checkin@miamisudburyschool.org">contact</a><span> | </span><a href='https://github.com/miamisudbury/checkin/'>source</a><span> | </span><a href="LICENSE">license</a><span> | </span><a href="#">top</a><span> | </span><a href="javascript:modeSwitch()" id="darkbutton">dark</a></span>
+</footer>
+</body>

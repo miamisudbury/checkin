@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Check-in Documentation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style type="text/css">
+body { 
+	background-color: #e7d4fc; 
+	margin: 0; 
+	padding: 0; 
+	font-family: Consolas;
+}
+div { 
+	background-color: #f2e8fc; 
+	width: 50%;
+	height: 20%;
+	margin: 2em auto; 
+	padding: 2em; 
+	border-radius: 0.5em; 
+	box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02); 
+}
+a {
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
+a:visited {
+	color: #0000ee;
+}
+footer {
+	background-color: #8d8299;
+	text-align: center;
+	position: sticky;
+	bottom: 0;
+}
+</style>
+<script>
+dark = false
+function modeSwitch() {
+	if (dark == false) {
+		document.getElementById("content").style.backgroundColor = "#383838";
+		document.getElementById("full").style.backgroundColor = "#212121";
+		document.getElementById("full").style.color = "#d6d6d6";
+		document.getElementById("footer").style.backgroundColor = "#1c1c1c";
+		document.getElementById("darkbutton").innerHTML = "light";
+		links = document.getElementsByTagName("a");
+		for (let i = 0; i < links.length; i++) {
+			links[i].style.color = "#9cdfff";
+		}
+		dark = true;
+	}
+	else if (dark == true) {
+		document.getElementById("content").style.backgroundColor = "#f2e8fc";
+		document.getElementById("full").style.backgroundColor = "#e7d4fc";
+		document.getElementById("full").style.color = "#000000";
+		document.getElementById("footer").style.backgroundColor = "#8d8299";
+		document.getElementById("darkbutton").innerHTML = "dark";
+		links = document.getElementsByTagName("a");
+		for (let i = 0; i < links.length; i++) {
+			links[i].style.color = "#0000ee";
+		}
+		dark = false;
+	}
+};
+window.onload = (event) => {
+	if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+		modeSwitch()
+	}
+};
+function offYouGo(version) {
+	location.href = location.href + "/v" + version;
+}
+let proceed = location.href.includes("?version=")
+if (proceed == true) {
+	location.href = location.href.replace("?version=", "/v") // this is a dumpster fire
+}
+</script>
+</head>
+<body id="full">
+<div id="content">
+	<h1 style="text-align:center;">No version specified!</h1>
+	<p style="text-align:center;">Please choose a version to view documentation for.</p><br>
+	<form style="text-align:center;">
+	<label>Version to view:</label>
+	<input type="number" min="1" name="version" id="version"></input>
+	<input type="submit" value="View" onclick="javascript:offYouGo(document.getElementById('version'));">
+	</form>
+</div>
+<footer id="footer">
+	<span><a href="mailto:checkin@miamisudburyschool.org">contact</a><span> | </span><a href='https://github.com/miamisudbury/checkin/'>source</a><span> | </span><a href="LICENSE">license</a><span> | </span><a href="#">top</a><span> | </span><a href="javascript:modeSwitch()" id="darkbutton">dark</a></span>
+</footer>
+</body>

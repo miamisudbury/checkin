@@ -74,7 +74,7 @@ This version does not automatically check for updates.
     if personid == "debug":
         try:
             import debug
-        except:
+        except FileNotFoundError:
             print("Debug module not found!")
             time.sleep(5)
         exit(100)
@@ -146,13 +146,9 @@ except:
     exit(2)
 payload = {'time_string': calcTimeSignIn(), 'personId': personid, 'is_arriving': isArriving}
 r = s.post('https://' + os.environ['subdomain'] + '.demschooltools.com/attendance/checkin/message', params=payload)
-if isArriving == "true":
-    inout = "in"
-elif isArriving == "false":
-    inout = "out"
 
 if r.status_code == 200:
-    print("Successfully signed " + name + " " + inout + "!")
+    print("Successfully signed " + name + " " + arriving + "!")
 else:
-    print("Failed to sign " + inout + " with status code " + str(r.status_code))
+    print("Failed to sign " + arriving + " with status code " + str(r.status_code))
 time.sleep(2)

@@ -8,6 +8,16 @@ import webbrowser
 
 version = "1"
 
+try:
+    os.environ['subdomain']
+    os.environ['checkinemail']
+    os.environ['checkinpass']
+except: # if this fails, we don't have the environment variables we need!
+    print("WARNING: One or more required environment variables are not present! Read documentation for more info!")
+    print("Please set the variables and run the script again.")
+    time.sleep(10)
+    exit(2)
+    
 def calcTimeSignIn():
     rawtime = localtime()
     timeasdt = datetime.now()
@@ -109,16 +119,6 @@ This version does not automatically check for updates.
     return personid
 
 # CODE STARTS EXECUTING HERE
-
-try:
-    os.environ['subdomain']
-    os.environ['checkinemail']
-    os.environ['checkinpass']
-except: # if this fails, we don't have the environment variables we need!
-    print("WARNING: One or more required environment variables are not present! Read documentation for more info!")
-    print("Please set the variables and run the script again.")
-    time.sleep(10)
-    exit(2)
 
 prompt()
 

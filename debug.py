@@ -118,7 +118,7 @@ elif selectedOption == '2':
     try:
         print(out)
     except:
-        print("The user you are trying to look for could not be found. Did you type their ID correctly?")
+        print("The user you are trying to look for could not be found. Did you type their info correctly?")
 
     time.sleep(10)
     # Returns raw (formatted) JSON. 
